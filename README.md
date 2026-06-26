@@ -1,8 +1,9 @@
 # Gandalf, der Graubalken
 
 Kleines natives macOS-Menüleisten-Tool (Apple Silicon) zum dauerhaften Unkenntlichmachen
-sensibler Stellen in einem Foto/Bild – mit einem **grau-melierten Balken**, der sich tonal
-an die Umgebung anpasst.
+sensibler Stellen in einem Foto/Bild – mit einem **grauen Balken**, der sich aber automatisch 
+tonal dezent an die Umgebung anpasst. Schwarzes Foto erhält einen dunklen Balken, ein helles 
+Dokumentenfoto erhält einen hellen Balken. Der Balken soll erkennbar, aber unauffällig sein.
 
 ## Bauen
 
@@ -38,25 +39,8 @@ In der Menüleiste erscheint ein 👁️-Symbol (durchgestrichenes Auge). Die Ap
 - Format: JPEG bleibt JPEG, alles andere wird als PNG gespeichert. Volle Originalauflösung bleibt erhalten.
 - In Apples Vorschau selbst lässt sich technisch nicht hineinzeichnen – deshalb das eigene kleine Fenster.
 
-## Weitergabe an Kollegen (DMG)
+## Installation mit DMG
 
-```bash
-bash build-dmg.sh
-```
-
-Erzeugt `dist/Gandalf-der-Graubalken-1.0.dmg` (App + „Programme"-Verknüpfung + „Erste Schritte.txt").
-Apple Silicon only. Da die App ad-hoc signiert (nicht notarisiert) ist, müssen Kollegen sie beim
+Apple Silicon only. Da die App ad-hoc signiert (nicht notarisiert) ist, musst du sie beim
 ersten Start einmal über **Systemeinstellungen → Datenschutz & Sicherheit → „Dennoch öffnen"** freigeben.
 
-## App-Icon neu erzeugen (optional)
-
-```bash
-bash tools/make-icon.sh
-```
-
-Rendert das Icon und baut `Resources/AppIcon.icns`.
-
-## Autostart (optional)
-
-Systemeinstellungen → Allgemein → Anmeldeobjekte → die App hinzufügen.
-Oder die App nach `/Programme` verschieben.
