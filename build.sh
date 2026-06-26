@@ -13,6 +13,7 @@ mkdir -p "$MACOS" "$APPDIR/Contents/Resources"
 echo "→ Kopiere Info.plist & Icon …"
 cp "$ROOT/Info.plist" "$APPDIR/Contents/Info.plist"
 cp "$ROOT/Resources/AppIcon.icns" "$APPDIR/Contents/Resources/AppIcon.icns"
+cp "$ROOT/Resources/cgi-logo.png" "$APPDIR/Contents/Resources/cgi-logo.png"
 
 echo "→ Kompiliere (Swift, arm64) …"
 swiftc -O -swift-version 5 \

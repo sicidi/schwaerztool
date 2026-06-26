@@ -411,7 +411,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             w.makeKeyAndOrderFront(nil)
             return
         }
-        let v = makeAboutView(appName: kAppName, subtitle: kAppSubtitle)
+        let logo = Bundle.main.url(forResource: "cgi-logo", withExtension: "png").flatMap { NSImage(contentsOf: $0) }
+        let v = makeAboutView(appName: kAppName, subtitle: kAppSubtitle, logo: logo)
         let size = v.fittingSize
         v.translatesAutoresizingMaskIntoConstraints = true
         let w = NSWindow(contentRect: NSRect(origin: .zero, size: size),

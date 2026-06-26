@@ -11,7 +11,9 @@ final class BgView: NSView {
 @main
 struct RenderAbout {
     static func main() {
-        let about = makeAboutView(appName: kAppName, subtitle: kAppSubtitle)
+        let logoPath = CommandLine.arguments.count > 2 ? CommandLine.arguments[2] : "Resources/cgi-logo.png"
+        let logo = NSImage(contentsOfFile: logoPath)
+        let about = makeAboutView(appName: kAppName, subtitle: kAppSubtitle, logo: logo)
         let size = about.fittingSize
         about.translatesAutoresizingMaskIntoConstraints = true
         about.frame = NSRect(origin: .zero, size: size)

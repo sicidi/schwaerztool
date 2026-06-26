@@ -223,7 +223,7 @@ final class LinkButton: NSButton {
 }
 
 /// Baut die Inhalts-View des „Info"-Fensters (analog zur Vorlage).
-func makeAboutView(appName: String, subtitle: String) -> NSView {
+func makeAboutView(appName: String, subtitle: String, logo: NSImage? = nil) -> NSView {
     let contentWidth: CGFloat = 540
     let pad: CGFloat = 40
 
@@ -246,10 +246,27 @@ func makeAboutView(appName: String, subtitle: String) -> NSView {
         return t
     }
 
-    // CGI-Logo (Rot)
-    let logo = NSTextField(labelWithString: "CGI")
-    logo.font = NSFont.systemFont(ofSize: 60, weight: .black)
-    logo.textColor = NSColor(srgbRed: 0.890, green: 0.098, blue: 0.216, alpha: 1)   // CGI-Rot #E31937
+    // CGI-Logo: echtes Bild, falls vorhanden – sonst roter Schriftzug als Fallback
+    let logoView: NSView
+    if let logo = logo {
+        let iv = NSImageView()
+        iv.image = logo
+        iv.imageScaling = .scaleProportionallyUpOrDown
+        iv.imageAlignment = .alignLeft
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        let h: CGFloat = 58
+        let w = h * (logo.size.width / max(1, logo.size.height))
+        NSLayoutConstraint.activate([
+            iv.heightAnchor.constraint(equalToConstant: h),
+            iv.widthAnchor.constraint(equalToConstant: w),
+        ])
+        logoView = iv
+    } else {
+        let t = NSTextField(labelWithString: "CGI")
+        t.font = NSFont.systemFont(ofSize: 60, weight: .black)
+        t.textColor = NSColor(srgbRed: 0.890, green: 0.098, blue: 0.216, alpha: 1)   // CGI-Rot #E31937
+        logoView = t
+    }
 
     let title = wrapping(appName, size: 28, color: .labelColor, weight: .bold)
     let sub = wrapping(subtitle, size: 15, color: .secondaryLabelColor)
@@ -269,8 +286,8 @@ func makeAboutView(appName: String, subtitle: String) -> NSView {
         "CGI und das CGI-Logo sind Marken/Assets der CGI Inc. bzw. verbundener Unternehmen.",
         size: 11.5, color: .tertiaryLabelColor)
 
-    stack.addArrangedSubview(logo)
-    stack.setCustomSpacing(18, after: logo)
+    stack.addArrangedSubview(logoView)
+    stack.setCustomSpacing(18, after: logoView)
     stack.addArrangedSubview(title)
     stack.setCustomSpacing(2, after: title)
     stack.addArrangedSubview(sub)
