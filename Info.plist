@@ -3,13 +3,15 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>Schwaerzen</string>
+    <string>Gandalf</string>
     <key>CFBundleDisplayName</key>
-    <string>Schwärzen</string>
+    <string>Gandalf, der Graubalken</string>
     <key>CFBundleIdentifier</key>
     <string>de.cgi.schwaerzen</string>
     <key>CFBundleExecutable</key>
     <string>Schwaerzen</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>CFBundleShortVersionString</key>

@@ -192,3 +192,105 @@ func isImageFile(_ url: URL) -> Bool {
     }
     return false
 }
+
+// MARK: - App-Name
+
+let kAppName = "Gandalf, der Graubalken"
+let kAppSubtitle = "Sensible Bildstellen unkenntlich machen"
+
+// MARK: - Über-Fenster (UI, aber offscreen testbar)
+
+/// Anklickbarer Link-Button (öffnet eine URL, sieht aus wie ein Textlink).
+final class LinkButton: NSButton {
+    var linkURL: URL?
+    init(text: String, url: URL?, size: CGFloat = 15) {
+        super.init(frame: .zero)
+        self.linkURL = url
+        self.isBordered = false
+        self.bezelStyle = .inline
+        self.setButtonType(.momentaryChange)
+        self.focusRingType = .none
+        self.attributedTitle = NSAttributedString(string: text, attributes: [
+            .foregroundColor: NSColor.linkColor,
+            .font: NSFont.systemFont(ofSize: size),
+        ])
+        self.target = self
+        self.action = #selector(openLink)
+    }
+    required init?(coder: NSCoder) { fatalError() }
+    @objc private func openLink() { if let u = linkURL { NSWorkspace.shared.open(u) } }
+    override func resetCursorRects() { addCursorRect(bounds, cursor: .pointingHand) }
+}
+
+/// Baut die Inhalts-View des „Info"-Fensters (analog zur Vorlage).
+func makeAboutView(appName: String, subtitle: String) -> NSView {
+    let contentWidth: CGFloat = 540
+    let pad: CGFloat = 40
+
+    let container = NSView()
+    container.translatesAutoresizingMaskIntoConstraints = false
+
+    let stack = NSStackView()
+    stack.orientation = .vertical
+    stack.alignment = .leading
+    stack.spacing = 8
+    stack.translatesAutoresizingMaskIntoConstraints = false
+    container.addSubview(stack)
+
+    func wrapping(_ s: String, size: CGFloat, color: NSColor, weight: NSFont.Weight = .regular) -> NSTextField {
+        let t = NSTextField(wrappingLabelWithString: s)
+        t.font = NSFont.systemFont(ofSize: size, weight: weight)
+        t.textColor = color
+        t.preferredMaxLayoutWidth = contentWidth
+        t.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        return t
+    }
+
+    // CGI-Logo (Rot)
+    let logo = NSTextField(labelWithString: "CGI")
+    logo.font = NSFont.systemFont(ofSize: 60, weight: .black)
+    logo.textColor = NSColor(srgbRed: 0.890, green: 0.098, blue: 0.216, alpha: 1)   // CGI-Rot #E31937
+
+    let title = wrapping(appName, size: 28, color: .labelColor, weight: .bold)
+    let sub = wrapping(subtitle, size: 15, color: .secondaryLabelColor)
+    let author = NSTextField(labelWithString: "Katrin Schwabel")
+    author.font = NSFont.systemFont(ofSize: 16, weight: .semibold)
+    let email = LinkButton(text: "katrin.schwabel@cgi.com", url: URL(string: "mailto:katrin.schwabel@cgi.com"))
+
+    let disclaimer = wrapping(
+        "Diese App gehört CGI (www.cgi.com/de). Sie ist als reines Freizeitprojekt entstanden und darf nicht an Kunden weitergegeben oder dort eingesetzt werden. Sie ist keine offizielle CGI-IP und wurde nicht durch eine formale Qualitätskontrolle geprüft.",
+        size: 13.5, color: .labelColor)
+
+    let usage = wrapping(
+        "So funktioniert’s:\n\n1.  Bild laden – über das Menüleisten-Symbol „Bild öffnen …“, per Drag & Drop aufs Symbol, oder „Bild aus der Vorschau laden“.\n\n2.  Mit der Maus Rechtecke über sensible Stellen ziehen – sie werden sofort mit grauem, an die Umgebung angepasstem Rauschen abgedeckt. (⌘Z = letzten entfernen · Esc = abbrechen)\n\n3.  Speichern (⌘S) – legt eine Kopie „…_geschwaerzt“ neben dem Original an. Das Original bleibt unverändert, EXIF-Daten werden entfernt.",
+        size: 13.5, color: .labelColor)
+
+    let footer = wrapping(
+        "CGI und das CGI-Logo sind Marken/Assets der CGI Inc. bzw. verbundener Unternehmen.",
+        size: 11.5, color: .tertiaryLabelColor)
+
+    stack.addArrangedSubview(logo)
+    stack.setCustomSpacing(18, after: logo)
+    stack.addArrangedSubview(title)
+    stack.setCustomSpacing(2, after: title)
+    stack.addArrangedSubview(sub)
+    stack.setCustomSpacing(24, after: sub)
+    stack.addArrangedSubview(author)
+    stack.setCustomSpacing(1, after: author)
+    stack.addArrangedSubview(email)
+    stack.setCustomSpacing(24, after: email)
+    stack.addArrangedSubview(disclaimer)
+    stack.setCustomSpacing(20, after: disclaimer)
+    stack.addArrangedSubview(usage)
+    stack.setCustomSpacing(24, after: usage)
+    stack.addArrangedSubview(footer)
+
+    NSLayoutConstraint.activate([
+        stack.topAnchor.constraint(equalTo: container.topAnchor, constant: pad),
+        stack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: pad),
+        stack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -pad),
+        stack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -pad),
+        stack.widthAnchor.constraint(equalToConstant: contentWidth),
+    ])
+    return container
+}

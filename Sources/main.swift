@@ -150,7 +150,7 @@ final class Editor: NSObject, NSWindowDelegate {
         view.baseCG = cg
         view.pixelSize = pixelSize
 
-        window.title = "Schwärzen – \(url.lastPathComponent)"
+        window.title = url.lastPathComponent
         window.subtitle = "\(cg.width) × \(cg.height) px"
         window.delegate = self
         window.isReleasedWhenClosed = false
@@ -288,12 +288,13 @@ final class DragView: NSView {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
     var editors: [Editor] = []
+    var aboutWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupMainMenu()
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
-            let img = NSImage(systemSymbolName: "eye.slash.fill", accessibilityDescription: "Schwärzen")
+            let img = NSImage(systemSymbolName: "eye.slash.fill", accessibilityDescription: kAppName)
             img?.isTemplate = true
             button.image = img
             let drag = DragView(frame: button.bounds)
@@ -314,11 +315,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let appItem = NSMenuItem()
         main.addItem(appItem)
         let appMenu = NSMenu()
-        let aboutItem = appMenu.addItem(withTitle: "Über Schwärzen", action: #selector(about), keyEquivalent: "")
+        let aboutItem = appMenu.addItem(withTitle: "Über \(kAppName)", action: #selector(about), keyEquivalent: "")
         aboutItem.target = self
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Fenster schließen", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
-        let quitItem = appMenu.addItem(withTitle: "Schwärzen beenden", action: #selector(quit), keyEquivalent: "q")
+        let quitItem = appMenu.addItem(withTitle: "\(kAppName) beenden", action: #selector(quit), keyEquivalent: "q")
         quitItem.target = self
         appItem.submenu = appMenu
         NSApp.mainMenu = main
@@ -335,7 +336,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let tip = menu.addItem(withTitle: "Tipp: Bild aufs Symbol ziehen", action: nil, keyEquivalent: "")
         tip.isEnabled = false
         menu.addItem(.separator())
-        let aboutItem = menu.addItem(withTitle: "Über Schwärzen", action: #selector(about), keyEquivalent: "")
+        let aboutItem = menu.addItem(withTitle: "Über \(kAppName)", action: #selector(about), keyEquivalent: "")
         aboutItem.target = self
         let quitItem = menu.addItem(withTitle: "Beenden", action: #selector(quit), keyEquivalent: "q")
         quitItem.target = self
@@ -405,11 +406,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func about() {
-        let a = NSAlert()
-        a.messageText = "Schwärzen"
-        a.informativeText = "Kleines Werkzeug zum dauerhaften Unkenntlichmachen sensibler Stellen in Bildern.\n\n1. Bild öffnen (Menü, Drag & Drop aufs Symbol oder aus der Vorschau laden)\n2. Rechtecke über sensible Stellen ziehen\n3. Speichern – es wird eine Kopie mit „_geschwaerzt“ neben dem Original angelegt."
-        a.addButton(withTitle: "OK")
-        a.runModal()
+        if let w = aboutWindow {
+            NSApp.activate(ignoringOtherApps: true)
+            w.makeKeyAndOrderFront(nil)
+            return
+        }
+        let v = makeAboutView(appName: kAppName, subtitle: kAppSubtitle)
+        let size = v.fittingSize
+        v.translatesAutoresizingMaskIntoConstraints = true
+        let w = NSWindow(contentRect: NSRect(origin: .zero, size: size),
+                         styleMask: [.titled, .closable, .miniaturizable],
+                         backing: .buffered, defer: false)
+        w.title = "Info"
+        w.contentView = v
+        w.isReleasedWhenClosed = false
+        w.center()
+        aboutWindow = w
+        NSApp.activate(ignoringOtherApps: true)
+        w.makeKeyAndOrderFront(nil)
     }
 
     @objc func quit() { NSApp.terminate(nil) }

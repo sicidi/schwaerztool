@@ -10,8 +10,9 @@ echo "→ Räume altes Build auf …"
 rm -rf "$APPDIR"
 mkdir -p "$MACOS" "$APPDIR/Contents/Resources"
 
-echo "→ Kopiere Info.plist …"
+echo "→ Kopiere Info.plist & Icon …"
 cp "$ROOT/Info.plist" "$APPDIR/Contents/Info.plist"
+cp "$ROOT/Resources/AppIcon.icns" "$APPDIR/Contents/Resources/AppIcon.icns"
 
 echo "→ Kompiliere (Swift, arm64) …"
 swiftc -O -swift-version 5 \
