@@ -2,12 +2,13 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-BUNDLE="Schwaerzen"
-APPDIR="$ROOT/build/$BUNDLE.app"
+EXEC="Schwaerzen"                  # interner Binary-Name (= CFBundleExecutable, stabil)
+APP="Gandalf, der Graubalken"      # sichtbarer .app-Name
+APPDIR="$ROOT/build/$APP.app"
 MACOS="$APPDIR/Contents/MacOS"
 
 echo "→ Räume altes Build auf …"
-rm -rf "$APPDIR"
+rm -rf "$APPDIR" "$ROOT/build/Schwaerzen.app"
 mkdir -p "$MACOS" "$APPDIR/Contents/Resources"
 
 echo "→ Kopiere Info.plist & Icon …"
@@ -23,7 +24,7 @@ swiftc -O -swift-version 5 \
     -framework CoreGraphics \
     "$ROOT/Sources/Core.swift" \
     "$ROOT/Sources/main.swift" \
-    -o "$MACOS/$BUNDLE"
+    -o "$MACOS/$EXEC"
 
 echo "→ Signiere (ad-hoc) …"
 codesign --force --sign - "$APPDIR"

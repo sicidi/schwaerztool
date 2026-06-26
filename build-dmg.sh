@@ -2,24 +2,25 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-BUNDLE="Schwaerzen"
-VOL="Schwärzen"
+APP="Gandalf, der Graubalken"      # sichtbarer .app-Name
+VOL="Gandalf, der Graubalken"      # Volume-Name des DMG
 VER="1.0"
 DIST="$ROOT/dist"
 STAGE="$DIST/dmgroot"
-DMG="$DIST/${BUNDLE}-${VER}.dmg"
+DMG="$DIST/Gandalf-der-Graubalken-${VER}.dmg"
 
 echo "→ App frisch bauen …"
 bash "$ROOT/build.sh"
 
 echo "→ Signatur der App prüfen …"
-codesign --verify --strict "$ROOT/build/$BUNDLE.app"
+codesign --verify --strict "$ROOT/build/$APP.app"
 
 echo "→ DMG-Inhalt zusammenstellen …"
-rm -rf "$STAGE" "$DMG"
+rm -rf "$STAGE"
 mkdir -p "$STAGE"
-ditto "$ROOT/build/$BUNDLE.app" "$STAGE/$BUNDLE.app"   # signiertes Bundle 1:1 übernehmen
-ln -s /Applications "$STAGE/Applications"               # Drag-to-Install-Ziel
+rm -f "$DIST"/*.dmg
+ditto "$ROOT/build/$APP.app" "$STAGE/$APP.app"           # signiertes Bundle 1:1 übernehmen
+ln -s /Applications "$STAGE/Applications"                  # Drag-to-Install-Ziel
 cp "$ROOT/packaging/Erste Schritte.txt" "$STAGE/Erste Schritte.txt"
 
 echo "→ DMG erzeugen …"
