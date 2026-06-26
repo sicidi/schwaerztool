@@ -5,7 +5,12 @@ sensibler Stellen in einem Foto/Bild – mit einem **grauen Balken**, der sich a
 tonal dezent an die Umgebung anpasst. Schwarzes Foto erhält einen dunklen Balken, ein helles 
 Dokumentenfoto erhält einen hellen Balken. Der Balken soll erkennbar, aber unauffällig sein.
 
-## Bauen
+## Installation mit *.dmg (prebuild für Apple M)
+
+Apple Silicon only. Da die App ad-hoc signiert (nicht notarisiert) ist, musst du sie beim
+ersten Start einmal über **Systemeinstellungen → Datenschutz & Sicherheit → „Dennoch öffnen"** freigeben.
+
+## Alternativ: Selbst Kompilieren
 
 ```bash
 bash build.sh
@@ -39,8 +44,4 @@ In der Menüleiste erscheint ein 👁️-Symbol (durchgestrichenes Auge). Die Ap
 - Format: JPEG bleibt JPEG, alles andere wird als PNG gespeichert. Volle Originalauflösung bleibt erhalten.
 - In Apples Vorschau selbst lässt sich technisch nicht hineinzeichnen – deshalb das eigene kleine Fenster.
 
-## Installation mit DMG
-
-Apple Silicon only. Da die App ad-hoc signiert (nicht notarisiert) ist, musst du sie beim
-ersten Start einmal über **Systemeinstellungen → Datenschutz & Sicherheit → „Dennoch öffnen"** freigeben.
 
