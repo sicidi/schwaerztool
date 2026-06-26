@@ -1,0 +1,10 @@
+# Build-Artefakte (werden mit build.sh / build-dmg.sh erzeugt)
+build/
+dist/
+
+# macOS
+.DS_Store
+
+# Editor / temporär
+*.swp
+*.o

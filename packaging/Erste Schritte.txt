@@ -1,0 +1,38 @@
+Schwärzen – Installation & erster Start
+========================================
+
+Sensible Stellen in Fotos/Bildern dauerhaft unkenntlich machen.
+
+INSTALLIEREN
+------------
+1. Das App-Symbol „Schwaerzen" auf den Ordner „Programme" (Applications)
+   in diesem Fenster ziehen.
+
+ERSTER START (einmalig freigeben)
+---------------------------------
+Die App ist nicht über den App Store verteilt, deshalb fragt macOS beim
+allerersten Start einmal nach. So gibst du sie frei:
+
+1. In „Programme" auf „Schwaerzen" doppelklicken.
+   -> Es erscheint eine Meldung, dass die App nicht geprüft werden konnte. OK/Fertig klicken.
+2. Apple-Menü () -> Systemeinstellungen -> „Datenschutz & Sicherheit".
+3. Ganz unten steht: „Schwaerzen wurde blockiert ..." -> Button „Dennoch öffnen".
+4. Noch einmal mit „Öffnen" bestätigen.
+
+Danach startet die App immer ganz normal. Sie hat KEIN Dock-Symbol, sondern
+ein Symbol oben rechts in der Menüleiste (durchgestrichenes Auge).
+
+Falls die App mal als „beschädigt" gemeldet wird, hilft einmalig im Terminal:
+   xattr -dr com.apple.quarantine "/Applications/Schwaerzen.app"
+
+BENUTZEN
+--------
+1. Auf das Menüleisten-Symbol klicken -> „Bild öffnen …"
+   (oder ein Bild direkt auf das Symbol ziehen, oder „Bild aus der Vorschau laden").
+2. Mit der Maus ein Rechteck über die sensiblen Stellen ziehen – die Stelle wird
+   sofort mit grauem, an die Umgebung angepasstem Rauschen abgedeckt. Mehrere möglich.
+   („Letzten entfernen" = ⌘Z, „Alle entfernen", Esc bricht das Aufziehen ab.)
+3. „Speichern" (⌘S): legt eine Kopie „<Name>_geschwaerzt" NEBEN dem Original an.
+   Das Original bleibt unverändert; die Schwärzung ist fest ins Bild eingebrannt.
+
+Voraussetzung: Mac mit Apple Silicon (M1–M4), macOS 13 oder neuer.
